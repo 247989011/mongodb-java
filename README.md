@@ -1,5 +1,169 @@
+<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+ //是否显示导航栏
+ var showNavBar = true;
+ //是否展开导航栏
+ var expandNavBar = true;
+
+ $(document).ready(function(){
+    var h1s = $("body").find("h1");
+    var h2s = $("body").find("h2");
+    var h3s = $("body").find("h3");
+    var h4s = $("body").find("h4");
+    var h5s = $("body").find("h5");
+    var h6s = $("body").find("h6");
+
+    var headCounts = [h1s.length, h2s.length, h3s.length, h4s.length, h5s.length, h6s.length];
+    var vH1Tag = null;
+    var vH2Tag = null;
+    for(var i = 0; i < headCounts.length; i++){
+        if(headCounts[i] > 0){
+            if(vH1Tag == null){
+                vH1Tag = 'h' + (i + 1);
+            }else{
+                vH2Tag = 'h' + (i + 1);
+            }
+        }
+    }
+    if(vH1Tag == null){
+        return;
+    }
+
+    $("body").prepend('<div class="BlogAnchor">' + 
+        '<span style="color:red;position:absolute;top:-6px;left:0px;cursor:pointer;" onclick="$(\'.BlogAnchor\').hide();">×</span>' +
+        '<p>' + 
+            '<b id="AnchorContentToggle" title="收起" style="cursor:pointer;">目录▲</b>' + 
+        '</p>' + 
+        '<div class="AnchorContent" id="AnchorContent"> </div>' + 
+    '</div>' );
+
+    var vH1Index = 0;
+    var vH2Index = 0;
+    $("body").find("h1,h2,h3,h4,h5,h6").each(function(i,item){
+        var id = '';
+        var name = '';
+        var tag = $(item).get(0).tagName.toLowerCase();
+        var className = '';
+        if(tag == vH1Tag){
+            id = name = ++vH1Index;
+            name = id;
+            vH2Index = 0;
+            className = 'item_h1';
+        }else if(tag == vH2Tag){
+            id = vH1Index + '_' + ++vH2Index;
+            name = vH1Index + '.' + vH2Index;
+            className = 'item_h2';
+        }
+        $(item).attr("id","wow"+id);
+        $(item).addClass("wow_head");
+        $("#AnchorContent").css('max-height', ($(window).height() - 180) + 'px');
+        $("#AnchorContent").append('<li><a class="nav_item '+className+' anchor-link" onclick="return false;" href="#" link="#wow'+id+'">'+name+" · "+$(this).text()+'</a></li>');
+    });
+
+    $("#AnchorContentToggle").click(function(){
+        var text = $(this).html();
+        if(text=="目录▲"){
+            $(this).html("目录▼");
+            $(this).attr({"title":"展开"});
+        }else{
+            $(this).html("目录▲");
+            $(this).attr({"title":"收起"});
+        }
+        $("#AnchorContent").toggle();
+    });
+    $(".anchor-link").click(function(){
+        $("html,body").animate({scrollTop: $($(this).attr("link")).offset().top}, 500);
+    });
+
+    var headerNavs = $(".BlogAnchor li .nav_item");
+    var headerTops = [];
+    $(".wow_head").each(function(i, n){
+        headerTops.push($(n).offset().top);
+    });
+    $(window).scroll(function(){
+        var scrollTop = $(window).scrollTop();
+        $.each(headerTops, function(i, n){
+            var distance = n - scrollTop;
+            if(distance >= 0){
+                $(".BlogAnchor li .nav_item.current").removeClass('current');
+                $(headerNavs[i]).addClass('current');
+                return false;
+            }
+        });
+    });
+
+    if(!showNavBar){
+        $('.BlogAnchor').hide();
+    }
+    if(!expandNavBar){
+        $(this).html("目录▼");
+        $(this).attr({"title":"展开"});
+        $("#AnchorContent").hide();
+    }
+ });
+</script>
+<style>
+    /*导航*/
+    .BlogAnchor {
+        background: #f1f1f1;
+        padding: 10px;
+        line-height: 180%;
+        position: fixed;
+        right: 48px;
+        top: 48px;
+        border: 1px solid #aaaaaa;
+    }
+    .BlogAnchor p {
+        font-size: 18px;
+        color: #15a230;
+        margin: 0 0 0.3rem 0;
+        text-align: right;
+    }
+    .BlogAnchor .AnchorContent {
+        padding: 5px 0px;
+        overflow: auto;
+    }
+    .BlogAnchor li{
+        text-indent: 0.5rem;
+        font-size: 14px;
+        list-style: none;
+    }
+    .BlogAnchor li .nav_item{
+        padding: 3px;
+    }
+    .BlogAnchor li .item_h1{
+        margin-left: 0rem;
+    }
+    .BlogAnchor li .item_h2{
+        margin-left: 2rem;
+        font-size: 0.8rem;
+    }
+    .BlogAnchor li .nav_item.current{
+        color: white;
+        background-color: #5cc26f;
+    }
+    #AnchorContentToggle {
+        font-size: 13px;
+        font-weight: normal;
+        color: #FFF;
+        display: inline-block;
+        line-height: 20px;
+        background: #5cc26f;
+        font-style: normal;
+        padding: 1px 8px;
+    }
+    .BlogAnchor a:hover {
+        color: #5cc26f;
+    }
+    .BlogAnchor a {
+        text-decoration: none;
+    }
+</style>
 # 模仿monogdb写一个数据库
-* 简介：
+
+[TOC]
+
+## 简介：
 
     MongoDB  是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据存储解决方案。
     MongoDB 是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。他支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。Mongo最大的特点是他支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引。
@@ -47,7 +211,7 @@
 
 
 
-## MongoDB 与MySQL对比
+## MongoDB 与MySQL对比````````````
 
 对比项|MySQL|Mongodb
 -----|-------|-------
@@ -439,8 +603,165 @@
         { "_id" : 1, "username" : "mengday5", "password" : "123456", "hobby" : [ "mm", "money" ] }
         >
         ```
+    * $push + $each : 批量push
+        ```cmd
+        > db.users.update({"username": "mengday5"}, {"$push": {"hobby": {"$each": ["play", "eat"]}}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday5", "password" : "123456", "hobby" : [ "mm", "money", "play", "eat" ] }
+        >
+        ```
+    * $pushAll = $push + $each 批量push
     
+        ```cmd
+        > db.users.update({"username": "mengday5"}, {"$pushAll": {"hobby": ["drink", "happy"]}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday5", "password" : "123456", "hobby" : [ "mm", "money", "play", "eat", "drink", "happy" ] }
+
+        ```    
+    * $addToSet：不重复的set集合
+        ```cmd
+        > db.user.update({},{$addToSet:{"hobby":"eat"}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.user.find()
+        { "_id" : 1, "username" : "mery", "hobby" : [ "eat" ] }
+        { "_id" : 2, "sex" : "nan" }
+        > db.user.update({"_id":2},{$addToSet:{"hobby":"eat"}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.user.find()
+        { "_id" : 1, "username" : "mery", "hobby" : [ "eat" ] }
+        { "_id" : 2, "sex" : "nan", "hobby" : [ "eat" ] }
+        > db.users.update({}, {"$addToSet": {"hobby": {"$each": ["eat", "drink"]}}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday5", "password" : "123456", "hobby" : [ "eat", "drink" ] }
+        >
+        ```
+    * $pop: 弹出数组的头部元素或尾部元素： -1：头部，1：尾部
+    
+        ```cmd
+        > db.users.update({}, {"$pop": {"hobby": 1}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday5", "password" : "123456", "hobby" : [ "eat" ] }
+        ```
+    * $pull: 删除数组中的值
+        ```cmd
+        > db.lists.insert({"no": [1, 1, 1, 3]})
+        WriteResult({ "nInserted" : 1 })
+        > db.lists.update({}, {"$pull": {"no": 1}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.lists.find()
+        { "_id" : ObjectId("597c0a3087d089dfa7ce1be2"), "no" : [ 3 ] }
+        >
+        ```
+    * 使用小标或者定位操作符$来操作数组
+        ```cmd
+         > db.users.find()
+         { "_id" : ObjectId("597c3c1587d089dfa7ce1be3"), "username" : "mengday", "addresses" : [ { "city" : "shanghai", "area" : "zhangjiang" }, { "city" : "be
+         ijing", "area" : "chaoyang" } ] }
+         >  
+         //修改内嵌文档数组中第二个元素的值
+          > db.users.update({"username": "mengday"}, {"$set": {"addresses.1.area": "chaoyangqu"}})
+          WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+          > db.users.findOne()
+          {
+                  "_id" : ObjectId("597c3c1587d089dfa7ce1be3"),
+                  "username" : "mengday",
+                  "addresses" : [
+                          {
+                                  "city" : "shanghai",
+                                  "area" : "zhangjiang"
+                          },
+                          {
+                                  "city" : "beijing",
+                                  "area" : "chaoyangqu"
+                          }
+                  ]
+          }
+          
+          // 定位操作符$: 查询条件一般是以数组中的元素为条件，使用$符号作为满足查询条件的第一条文档对应的下标值
+          > db.users.update({"addresses.city": "beijing"}, {"$set": {"addresses.$.area": "CHAOYANG"}})
+          WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+          > db.users.findOne(){
+                  "_id" : ObjectId("597c3c1587d089dfa7ce1be3"),
+                  "username" : "mengday",
+                  "addresses" : [
+                          {
+                                  "city" : "shanghai",
+                                  "area" : "zhangjiang"
+                          },
+                          {
+                                  "city" : "beijing",
+                                  "area" : "CHAOYANG"
+                          }
+                  ]
+          }
+        ```
+    * 文档整体替换
+        ```cmd
+          > db.users.update({"username": "mengday5"}, {"age": 17})
+          WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+          > db.users.find()
+          { "_id" : 1, "age" : 17 }  
+        ```    
+    * // 第三个参数： 插入或者更新，当_id不存在的时候插入，当_id值存在的时候更新
+        ```cmd
+        > db.users.update({"_id": 2}, {"username": "mengday", "age": 16}, true)
+        WriteResult({ "nMatched" : 0, "nUpserted" : 1, "nModified" : 0, "_id" : 2 })
+        > db.users.find()
+        { "_id" : 1, "age" : 17 }
+        { "_id" : 2, "username" : "mengday", "age" : 16 }
         
+        // 更新
+        > db.users.update({"_id": 2}, {"username": "mengday2", "birthday": new Date()}, true)
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.users.find()
+        { "_id" : 1, "age" : 17 }
+        { "_id" : 2, "username" : "mengday2", "birthday" : ISODate("2017-07-25T06:33:10.579Z") }
+        
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday", "age" : 16 }
+        { "_id" : 2, "username" : "mengday2", "age" : 16 }
+        ```        
+    * 更新满足条件的第一条文档
+        ```cmd
+        > db.users.update({"age": 16}, {$set: {"age": 18}})
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday", "age" : 18 }
+        { "_id" : 2, "username" : "mengday2", "age" : 16 }
+        ```
+    *  第三个参数：insertOrUpdate, 第四个参数：是否批量更新，true就是更新所有满足条件的文档
+        ```cmd
+        > db.users.update({"age": {$gte: 16}}, {$set: {"age": 25}}, false, true)
+        WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
+        > db.users.find()
+        { "_id" : 1, "username" : "mengday", "age" : 25 }
+        { "_id" : 2, "username" : "mengday2", "age" : 25 }
+        >
+        ```  
+    * 查询然后更新，更新是整体替换， 如果想更新指定的字段使用$set修改器即可
+        ```cmd
+        > db.users.findAndModify({
+            query: { "username": "mengday"},
+            update:{
+                   "age": 20,
+                    "username": "mengday20"
+            }
+        })
+        {
+                "_id" : 1,
+                "username" : "mengday",
+                "age" : 20,
+                "birthday" : ISODate("2017-07-25T07:05:28.286Z")
+        }
+        > db.users.find()
+        { "_id" : 1, "age" : 20, "username" : "mengday20" }
+        ```
+    
+    
          
 * 查询指定文档的数据
     
