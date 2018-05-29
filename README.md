@@ -1,164 +1,3 @@
-<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script type="text/javascript">
- //是否显示导航栏
- var showNavBar = true;
- //是否展开导航栏
- var expandNavBar = true;
-
- $(document).ready(function(){
-    var h1s = $("body").find("h1");
-    var h2s = $("body").find("h2");
-    var h3s = $("body").find("h3");
-    var h4s = $("body").find("h4");
-    var h5s = $("body").find("h5");
-    var h6s = $("body").find("h6");
-
-    var headCounts = [h1s.length, h2s.length, h3s.length, h4s.length, h5s.length, h6s.length];
-    var vH1Tag = null;
-    var vH2Tag = null;
-    for(var i = 0; i < headCounts.length; i++){
-        if(headCounts[i] > 0){
-            if(vH1Tag == null){
-                vH1Tag = 'h' + (i + 1);
-            }else{
-                vH2Tag = 'h' + (i + 1);
-            }
-        }
-    }
-    if(vH1Tag == null){
-        return;
-    }
-
-    $("body").prepend('<div class="BlogAnchor">' + 
-        '<span style="color:red;position:absolute;top:-6px;left:0px;cursor:pointer;" onclick="$(\'.BlogAnchor\').hide();">×</span>' +
-        '<p>' + 
-            '<b id="AnchorContentToggle" title="收起" style="cursor:pointer;">目录▲</b>' + 
-        '</p>' + 
-        '<div class="AnchorContent" id="AnchorContent"> </div>' + 
-    '</div>' );
-
-    var vH1Index = 0;
-    var vH2Index = 0;
-    $("body").find("h1,h2,h3,h4,h5,h6").each(function(i,item){
-        var id = '';
-        var name = '';
-        var tag = $(item).get(0).tagName.toLowerCase();
-        var className = '';
-        if(tag == vH1Tag){
-            id = name = ++vH1Index;
-            name = id;
-            vH2Index = 0;
-            className = 'item_h1';
-        }else if(tag == vH2Tag){
-            id = vH1Index + '_' + ++vH2Index;
-            name = vH1Index + '.' + vH2Index;
-            className = 'item_h2';
-        }
-        $(item).attr("id","wow"+id);
-        $(item).addClass("wow_head");
-        $("#AnchorContent").css('max-height', ($(window).height() - 180) + 'px');
-        $("#AnchorContent").append('<li><a class="nav_item '+className+' anchor-link" onclick="return false;" href="#" link="#wow'+id+'">'+name+" · "+$(this).text()+'</a></li>');
-    });
-
-    $("#AnchorContentToggle").click(function(){
-        var text = $(this).html();
-        if(text=="目录▲"){
-            $(this).html("目录▼");
-            $(this).attr({"title":"展开"});
-        }else{
-            $(this).html("目录▲");
-            $(this).attr({"title":"收起"});
-        }
-        $("#AnchorContent").toggle();
-    });
-    $(".anchor-link").click(function(){
-        $("html,body").animate({scrollTop: $($(this).attr("link")).offset().top}, 500);
-    });
-
-    var headerNavs = $(".BlogAnchor li .nav_item");
-    var headerTops = [];
-    $(".wow_head").each(function(i, n){
-        headerTops.push($(n).offset().top);
-    });
-    $(window).scroll(function(){
-        var scrollTop = $(window).scrollTop();
-        $.each(headerTops, function(i, n){
-            var distance = n - scrollTop;
-            if(distance >= 0){
-                $(".BlogAnchor li .nav_item.current").removeClass('current');
-                $(headerNavs[i]).addClass('current');
-                return false;
-            }
-        });
-    });
-
-    if(!showNavBar){
-        $('.BlogAnchor').hide();
-    }
-    if(!expandNavBar){
-        $(this).html("目录▼");
-        $(this).attr({"title":"展开"});
-        $("#AnchorContent").hide();
-    }
- });
-</script>
-<style>
-    /*导航*/
-    .BlogAnchor {
-        background: #f1f1f1;
-        padding: 10px;
-        line-height: 180%;
-        position: fixed;
-        right: 48px;
-        top: 48px;
-        border: 1px solid #aaaaaa;
-    }
-    .BlogAnchor p {
-        font-size: 18px;
-        color: #15a230;
-        margin: 0 0 0.3rem 0;
-        text-align: right;
-    }
-    .BlogAnchor .AnchorContent {
-        padding: 5px 0px;
-        overflow: auto;
-    }
-    .BlogAnchor li{
-        text-indent: 0.5rem;
-        font-size: 14px;
-        list-style: none;
-    }
-    .BlogAnchor li .nav_item{
-        padding: 3px;
-    }
-    .BlogAnchor li .item_h1{
-        margin-left: 0rem;
-    }
-    .BlogAnchor li .item_h2{
-        margin-left: 2rem;
-        font-size: 0.8rem;
-    }
-    .BlogAnchor li .nav_item.current{
-        color: white;
-        background-color: #5cc26f;
-    }
-    #AnchorContentToggle {
-        font-size: 13px;
-        font-weight: normal;
-        color: #FFF;
-        display: inline-block;
-        line-height: 20px;
-        background: #5cc26f;
-        font-style: normal;
-        padding: 1px 8px;
-    }
-    .BlogAnchor a:hover {
-        color: #5cc26f;
-    }
-    .BlogAnchor a {
-        text-decoration: none;
-    }
-</style>
 # 模仿monogdb写一个数据库
 
 [TOC]
@@ -343,7 +182,7 @@
     `db.dropDatabase()`   
 
 ### 集合操作
-* 创建集合(文档)
+#### 创建集合(文档)
   * 方式一：隐式创建集合
             
             当向集合中的插入文档时，如果集合不存在，系统会自动创建，所以向一个不存在的集合中插入数据也就是创建了集合
@@ -378,18 +217,18 @@
   users
   >
   ```
-* 删除集合
+#### 删除集合
 
     db.集合名字.drop()
     ```cmd
     > db.address.drop()
     true
     ```
-* 查看集合
+#### 查看集合
 
     `show tables`和`show collections`都可以查看当前数据下的集合
      
-* 添加数据(记录)
+#### 添加数据(记录)
     * 方式一： insert： _id 会自动创建唯一索引，当id重复的时候会报错
            
             db.[documentName].insert({})        // 插入一条，返回值中不包含insertedIds
@@ -508,7 +347,7 @@
         { "_id" : 6, "age" : 20, "gender" : 1 }
         >
         ```
-* 删除 remove
+#### 删除 remove
     
     `remove({删除条件})`： 删除满足条件的所有数据 <br>
     `remove({删除条件}， true)`： 删除满足条件的第一条数据  <br>
@@ -557,7 +396,7 @@
     }
     ```   
 
-* 更新 update，findAndModify
+#### 更新 update，findAndModify
         
         更新指定字段的值 
         替换整个文档 
@@ -763,12 +602,234 @@
     
     
          
-* 查询指定文档的数据
+#### 查询
     
-    `db.[documentName].find()`  查询所有
-    `db.[documentName].findOne()`  查询第一条数据
-* 更新文档数据
+    `db.[documentName].find()`  查询所有    <br>
+    `db.[documentName].find().limit(2)`  查询两条文档    <br>
+    `db.[documentName].findOne()`  查询第一条数据<br>
+    `db.users.find().pretty()`      pretty() 用于格式化查询的结果
+    db.users.find().count()`        统计数量
     
+  ```cmd
+  // 查询条件， 相当于 select * from users where age < 20
+  > db.users.find({"age": {$lt: 20}})
+  { "_id" : 2, "username" : "tom", "age" : 18, "birthday" : ISODate("2017-07-25T07:05:52.166Z") }
+  
+  // 查询指定的字段，1:代表要查询的字段，0：代表不要查询的字段 ，相当于 select username, age from users where age < 20
+  > db.users.find({"age": {$lt: 20}}, {"_id":0, "username": 1, "age": 1})
+  { "username" : "tom", "age" : 18 }
+  
+  // and 条件,多个调剂直接用逗号分开，不需要什么操作符： 相当于 select * from users where age < 20 and id < 3
+  > db.users.find({"age": {$lt: 30}, "_id": {$lt: 3 }})
+  { "_id" : 1, "username" : "mengday", "age" : 20, "birthday" : ISODate("2017-07-25T07:05:28.286Z") }
+  { "_id" : 2, "username" : "tom", "age" : 18, "birthday" : ISODate("2017-07-25T07:05:52.166Z") }
+  
+  // 同一个字段多个条件： 相当于 select * from users where age > 25 and age < 30
+  > db.users.find({"age": {$gt: 25, $lt:30 }})
+  { "_id" : 3, "username" : "xiaohong", "age" : 28, "birthday" : ISODate("2017-07-25T07:06:13.741Z") }
+  
+  { "_id" : 4, "username" : "xiaoming", "age" : 27, "birthday" : ISODate("2017-07-25T07:06:44.812Z") }
+  
+  // or： 相当于 select * from users where age > 30 or username = 'tom'
+  > db.users.find({$or: [{"age": {$gt: 30}}, {"username": "tom"}]})
+  { "_id" : 2, "username" : "tom", "age" : 18, "birthday" : ISODate("2017-07-25T07:05:52.166Z") }
+  { "_id" : 5, "username" : "sunday", "age" : 37, "birthday" : ISODate("2017-07-25T07:07:45.420Z") }
+  
+  // and or 混合使用，相当于 select * from users where id < 4 and (username = 'mengdat' or age < 20)
+  > db.users.find({ $or: [{"username": "mengday"}, {"age": {$lt: 20}}], "_id": {$lt: 4} })
+  { "_id" : 1, "username" : "mengday", "age" : 20, "birthday" : ISODate("2017-07-25T07:05:28.286Z") }
+  { "_id" : 2, "username" : "tom", "age" : 18, "birthday" : ISODate("2017-07-25T07:05:52.166Z") }
+  >
+  
+  // in: 相当于 select * from users where age in (18, 28)
+  
+  > db.users.find({"age": {$in: [18, 28]}})
+  { "_id" : 2, "username" : "tom", "age" : 18, "birthday" : ISODate("2017-07-25T07:05:52.166Z") }
+  { "_id" : 3, "username" : "xiaohong", "age" : 28, "birthday" : ISODate("2017-07-25T07:06:13.741Z") }
+  >
+  
+  // 正则表达式不但可以匹配字符串还可以匹配字段值是正则表达式类型的，此时是相等匹配
+  // 模糊查询，正则表达式： 以xiao开头，以ng结尾
+  // 相当于 select * from users where username like 'xiao%' and username like '%ng'
+  > db.users.find({"username": /^xiao/, "username": /ng$/})
+  { "_id" : 3, "username" : "xiaohong", "age" : 28, "birthday" : ISODate("2017-07-25T07:06:13.741Z") }
+  
+  { "_id" : 4, "username" : "xiaoming", "age" : 27, "birthday" : ISODate("2017-07-25T07:06:44.812Z") }
+  
+  > db.users.insert({"_id": 6, "username": "sunday", "age": 39, "birthday": new Date(), "hobby": ["eat
+  ", "drink", "play", "happy", "money", "mm"] })
+  WriteResult({ "nInserted" : 1 })
+  
+  // 正则表达式忽略大小写
+  > db.users.find({"username": {$regex:/sunday/, $options:"$i"}})
+  { "_id" : 5, "username" : "sunday", "age" : 37, "birthday" : ISODate("2017-07-25T07:07:45.420Z") }
+  { "_id" : 6, "username" : "SunDay", "age" : 39, "birthday" : ISODate("2017-07-25T07:53:16.072Z"), "h
+  obby" : [ "eat", "drink", "play", "happy", "money", "mm" ] }
+  
+  // 正则表达式用于数组
+  > db.users.find({"hobby": {$regex: "mm"}})
+  { "_id" : 6, "username" : "SunDay", "age" : 39, "birthday" : ISODate("2017-07-25T07:53:16.072Z"), "h
+  obby" : [ "eat", "drink", "play", "happy", "money", "mm" ] }
+  
+  // 正则表达式包含变量时需要使用eval()函数来计算
+  > var username = "sunday"
+  > db.users.find({"username": {$regex:eval("/" + username + "/i")}})
+  { "_id" : 5, "username" : "sunday", "age" : 37, "birthday" : ISODate("2017-07-25T07:07:45.420Z") }
+  { "_id" : 6, "username" : "SunDay", "age" : 39, "birthday" : ISODate("2017-07-25T07:53:16.072Z"), "h
+  obby" : [ "eat", "drink", "play", "happy", "money", "mm" ] }
+  
+  // 数组字段： 值，意思就是这个数组中是否包含该元素，如果包含就是满足条件的
+  > db.food.insert({"fruit": ["apple", "banana", "cherry"]})
+  WriteResult({ "nInserted" : 1 })
+  > db.food.find({"fruit": "banana"})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "apple", "banana", "cherry" ] }
+  
+  // 当值是一个值时是是否包含，当值是数组时就是精确匹配了，此时匹配不到结果
+  > db.food.find({"fruit":  ["apple", "cherry"]})
+  // $all: 数组中同时都包含多个元素
+  > db.food.find({"fruit": {$all: ["apple", "cherry"]}})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "apple", "banana", "cherry" ] }
+  
+  // 查询数组中指定的下标对应的值是否和给的值一样
+  // 查询文档中的fruit中第三个元素的值是cherry的文档
+  > db.food.find({"fruit.2": "cherry"})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "apple", "banana", "cherry" ] }
+  >
+  
+  // $size: 根据数组的长度进行筛选
+  > db.food.find({"fruit": {$size: 3}})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "apple", "banana", "cherry" ] }
+  
+  
+  > db.food.find()
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "apple", "banana", "orange", "cherry" ]
+  >
+  // 返回数组中前两个元素
+  > db.food.find({}, {"fruit": {$slice: 2}})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "apple", "banana" ] }
+  // 返回数组中后两个元素
+  > db.food.find({}, {"fruit": {$slice: -2}})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "orange", "cherry" ] }
+  // 偏移下标为1，取2个长度，相当于 limint 0, 2
+  > db.food.find({}, {"fruit": {$slice: [1, 2]}})
+  { "_id" : ObjectId("597d353be210addac88b2a36"), "fruit" : [ "banana", "orange" ] }
+  >
+  
+  
+  > db.test.find()
+  { "_id" : ObjectId("597d4342e210addac88b2a37"), "x" : [ 2, 5 ] }
+  { "_id" : ObjectId("597d4350e210addac88b2a38"), "x" : [ 4, 5 ] }
+  { "_id" : ObjectId("597d4367e210addac88b2a39"), "x" : [ 4, 10 ] }
+  // $elemMatch: 数组中是否有一个元素同时满足所有条件（只要有一个元素满足就能匹配上）
+  > db.test.find({"x": {"$elemMatch": {$gt: 5, $lt: 20}}})
+  { "_id" : ObjectId("597d4367e210addac88b2a39"), "x" : [ 4, 10 ] }
+  
+  // 根据字段的数据类型来查询，2代码String
+  > db.users.find({"username": {$type: 2}})
+  { "_id" : 1, "username" : "mengday", "age" : 20, "birthday" : ISODate("2017-07-25T07:05:28.286Z") }
+  { "_id" : 2, "username" : "tom", "age" : 18, "birthday" : ISODate("2017-07-25T07:05:52.166Z") }
+  { "_id" : 3, "username" : "xiaohong", "age" : 28, "birthday" : ISODate("2017-07-25T07:06:13.741Z") }
+  { "_id" : 4, "username" : "xiaoming", "age" : 27, "birthday" : ISODate("2017-07-25T07:06:44.812Z") }
+  { "_id" : 5, "username" : "sunday", "age" : 37, "birthday" : ISODate("2017-07-25T07:07:45.420Z") }
+  { "_id" : 6, "username" : "SunDay", "age" : 39, "birthday" : ISODate("2017-07-25T07:53:16.072Z"), "h
+  obby" : [ "eat", "drink", "play", "happy", "money", "mm" ] }
+  
+  // 查询文档中没有username字段的或者username的值是null
+  > db.users.find({"username": null})
+  // 查询文档中存在username字段，并且值是null， $in:[null]和username:null 一样的效果
+  > db.users.find({"username": {$in: [null], $exists: true}})
+  { "_id" : ObjectId("597c58f848c373e228a925a6"), "username" : null, "age" : 25 }
+  { "_id" : ObjectId("597c591e48c373e228a925ab"), "username" : null, "age" : 24 }
+  
+  // 自定义筛选条件，通过js函数返回的boolean值来筛选，可以实现复杂条件的筛选
+  > db.users.find({$where: function(){ return this.username == 'mengday' }})
+  { "_id" : 1, "username" : "mengday", "age" : 20, "birthday" : ISODate("2017-07-25T07:05:28.286Z") }
+  
+  // 运行命令： 平常使用的很多命令如db.test.drop()底层都是调用的db.runCommand({"函数名"：参数值})来实现的
+  > db.runCommand({"drop": "test"})
+  { "ns" : "test.test", "nIndexesWas" : 1, "ok" : 1 }
+  // db.getLastError 和 db.runCommand({getLastError: 1}) 是一样的
+  > db.getLastError
+  > db.runCommand({getLastError: 1})
+  
+  
+
+  ```  
+#### 游标
+   
+游标： 将查询结果赋值给一个局部变量，这个局部变量就是游标, 使用游标时shell并不理解查询数据库，而是等待真正开始要求获取结果时（调用hasNext()或者next()方法）才发送查询，这样在执行之前可以给查询附加额外的选项，如skip、limit、sort等,游标是一次性的，即用过一次即销毁   
+```cmd
+    var cursor = db.users.find() 
+    while(cursor.hasNext()){ 
+    user = cursor.next(); 
+    print(user); 
+    }
+    // 需要重新查新赋值一个游标，上一个游标已经销毁
+    var cursor = db.users.find() 
+    cursor.forEach(function(x){ 
+    print(x); 
+    });
+    
+```
+#### 排序
+sort 排序， 1：升续， 2：降续
+   ```cmd
+   db.users.find({}, {“username”: 1}).skip(2).limit(2).sort({“age”: 1}) 
+   { “_id” : 4, “username” : “xiaoming” } 
+   { “_id” : 3, “username” : “xiaohong” }
+   ```
+#### 分页  
+* 第一种方法使用skip和limit函数, skip(2) 是指的offset， 相当于 select id, username from users limit 2，2
+  ```cmd
+  db.users.find({}, {“username”: 1}).skip(2).limit(2) 
+  { “_id” : 3, “username” : “xiaohong” } 
+  { “_id” : 4, “username” : “xiaoming” }
+  ```    
+* 第二种方法：使用sort和limit函数
+    ```cmd
+    db.users.find() 
+    { “_id” : 1, “username” : “mengday1”, “age” : 26, “create_date” : ISODate(“2017-07-30T07:52:33.837Z”) } 
+    { “_id” : 2, “username” : “mengday2”, “age” : 26, “create_date” : ISODate(“2017-07-30T07:52:43.021Z”) } 
+    { “_id” : 3, “username” : “mengday3”, “age” : 26, “create_date” : ISODate(“2017-07-30T07:52:53.420Z”) } 
+    { “_id” : 4, “username” : “mengday4”, “age” : 26, “create_date” : ISODate(“2017-07-30T07:53:00.299Z”) } 
+    { “_id” : 5, “username” : “mengday5”, “age” : 26, “create_date” : ISODate(“2017-07-30T07:53:07.826Z”) } 
+    // 先根据日期进行排序，获取第一页数据时直接使用limit指定获取的条数，将结果赋值给局部变量，然后循环该游标，记录下最后一条文档对应的日期值
+    var page1 = db.users.find().sort({“create_date”: 1}).limit(5); 
+    var latest = null; 
+    while(page1.hasNext()){ 
+    … latest = page1.next(); 
+    … print(“page1:” + latest.username); 
+    … } 
+    page1:mengday1 
+    page1:mengday2 
+    page1:mengday3 
+    page1:mengday4 
+    page1:mengday5
+    // 获取后面的页：将上一页保存的文档对应的时间作为下一页查询的条件，因为还好对时间进行排序，又过滤掉之前的数据，相当于skip的效果，然后再获取指定的条数
+    var page2 = db.users.find({“create_date”: {$gt: latest.create_date}}).sort({“create_date”: 1}).limit(5); 
+    while(page2.hasNext()){ 
+    … latest = page2.next(); 
+    … print(“page2:” + latest.username); 
+    … } 
+    page2:mengday6 
+    page2:mengday7 
+    page2:mengday8
+    ``` 
+### 聚合操作
+
+#### distinct: 查询某个字段的所有不重复的值, 相当于 select distinct age from users
+  ```cmd
+    db.users.distinct(“age”) 
+    [ 20, 18, 28, 27, 37, 39 ]
+  ```   
+#### 分组group
+语法：`db.collection.group({ key, reduce, initial [, keyf] [, cond] [, finalize] })` *注：3.4版本开始弃用！
+    
+    db.collection.aggregate()
+    db.collection.mapReduce()
+[官网文档](https://docs.mongodb.com/manual/reference/method/db.collection.aggregate/#db.collection.aggregate)
+   
+ 
     
 ```cmd
 // mong shell 是一种javascript shell, 可以定义变量、函数，调用函数
@@ -860,20 +921,23 @@ function (query, obj, upsert, multi) {
     var parsed = this._parseUpdate(query, obj, upsert, multi);
     ...
 }
-
-// 打印语句
+```
+* 打印语句
+```
 > print("hello, mongodb")
 hello, mongodb
 >
-
-// 执行js脚本
+```
+* 执行js脚本
+```
 D:\Java\MongoDB\Server\bin>mongo script1.js script2.js
 loading file: script1.js
 I am script1.js
 loading file: script2.js
 I am script2.js
-
-// 使用load（）函数加载脚本来执行
+```
+* 使用load（）函数加载脚本来执行
+```
 > load("script1.js")
 I am script1.js
 true
@@ -889,8 +953,9 @@ print(db.getCollectionNames());  // show collections
 users
 true
 >
-
-// 使用脚本可以定义一些辅助的工具函数
+```
+* 使用脚本可以定义一些辅助的工具函数
+```
 tools.js
 var connectTo = function (port, dbname) {
     if(!port) port = 27017;
@@ -910,9 +975,10 @@ connecting to: mongodb://localhost:27017/admin
 MongoDB server version: 3.4.6
 admin
 >
+```
 
-
-//客户端启动时自动执行js脚本
+* 客户端启动时自动执行js脚本
+```
 //在用户的主目录下（如C:\Users\mengday）下创建一个.mongorc.js文件，该脚本可以做一些操作，如重写shell命令，禁掉一部分功能，如删除数据库，表等危险操作
 // .mongorc.js
 print("--------------MongoDB is started--------------");
@@ -936,9 +1002,10 @@ test
 > db.dropDatabase()
 not permission
 >
+```
 
-
-// mongo 启动后给EDITOR变量赋值一个文本编辑器的位置，然后就可以使用edit命令来打开编辑某个变量了，编辑后保存，然后直接关掉编辑器即可，这对于一条命令或者变量比较长编辑比较方便，注意文本编辑器的位置不能包含空格，路径要使用/,不能使用\
+* mongo 启动后给EDITOR变量赋值一个文本编辑器的位置，然后就可以使用edit命令来打开编辑某个变量了，编辑后保存，然后直接关掉编辑器即可，这对于一条命令或者变量比较长编辑比较方便，注意文本编辑器的位置不能包含空格，路径要使用/,不能使用\
+```
 EDITOR="D:/SublimeText/sublime_text.exe"
 var user = {"username": "mengday", "nickname": "xxx"};
 edit user
@@ -950,4 +1017,7 @@ EDITOR="D:/SublimeText/sublime_text.exe";
 
     
 ## bson 扩充的数据类型
+
+[BSON](https://docs.mongodb.com/manual/reference/bson-types/index.html)是一种二进制序列化格式，用于存储文档并在MongoDB中进行远程过程调用。BSON规范位于[bsonspec.org](bsonspec.org)。
+
 

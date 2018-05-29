@@ -16,8 +16,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="-1050">
-                <caret line="4" column="2" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
+              <first_editor relative-caret-position="711">
+                <caret line="1023" lean-forward="true" selection-start-line="1023" selection-end-line="1023" />
               </first_editor>
               <second_editor />
             </state>
@@ -56,30 +56,12 @@
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="mongodb-java" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mongodb-java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="mongodb-java" type="b2602c69:ProjectViewProjectNode" />
-              <item name="mongodb-java" type="462c0819:PsiDirectoryNode" />
-              <item name="doc" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="ignore_missing_gitignore" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -119,12 +101,12 @@
       <workItem from="1527151851071" duration="6813000" />
       <workItem from="1527237971925" duration="3738000" />
       <workItem from="1527394312457" duration="7632000" />
-      <workItem from="1527496726305" duration="3476000" />
+      <workItem from="1527496726305" duration="9106000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21659000" />
+    <option name="totallyTimeSpent" value="27289000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -180,8 +162,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="-1050">
-            <caret line="4" column="2" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
+          <first_editor relative-caret-position="711">
+            <caret line="1023" lean-forward="true" selection-start-line="1023" selection-end-line="1023" />
           </first_editor>
           <second_editor />
         </state>
